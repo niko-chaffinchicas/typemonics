@@ -1,0 +1,30 @@
+{
+  "name": "typemonics",
+  "version": "1.0.0",
+  "description": "A tool for exploring the harmonics of typographic pairings and modularly scaling font sizes, specifically selecting from the typefaces available through Google Fonts.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikochaffin/typemonics.git"
+  },
+  "keywords": [],
+  "author": "Niko Chaffin",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.5",
+    "colors": "^1.1.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-clean-css": "^2.3.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-util": "^3.0.7"
+  },
+  "bugs": {
+    "url": "https://github.com/nikochaffin/typemonics/issues"
+  },
+  "homepage": "https://github.com/nikochaffin/typemonics#readme"
+}
