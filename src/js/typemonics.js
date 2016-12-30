@@ -33,6 +33,7 @@
     var val = floatElseString(e.target.value);
 
     data[name] = val;
+
     if (name == "font-base" || name == "ratio") {
       updateAllFontSizes(data);
     } else if (name.indexOf('-step') > -1) {
