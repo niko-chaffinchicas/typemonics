@@ -4,4 +4,21 @@
 body {
   font-family: monospace;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px; }
+
+input, button {
+  font-size: inherit;
+  font-family: inherit; }
+
+input {
+  display: inline-block;
+  width: 100px; }
+
+.control-panel {
+  margin-bottom: 2em; }
+
+.sample-content {
+  font-size: 16px; }
+  .sample-content h1, .sample-content h2, .sample-content h3, .sample-content h4, .sample-content h5, .sample-content h6, .sample-content p {
+    margin: 0; }

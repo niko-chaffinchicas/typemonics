@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/nikochaffin/typemonics/issues"
   },
-  "homepage": "https://github.com/nikochaffin/typemonics#readme"
+  "homepage": "https://github.com/nikochaffin/typemonics#readme",
+  "dependencies": {}
 }

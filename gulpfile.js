@@ -66,10 +66,11 @@ gulp.task('serve', ['watch'], function() {
       baseDir: '.',
       index: 'index.html'
     },
+    delay: 300,
     browser: "google chrome"
   });
 
-  gulp.watch('src/**/*.js').on('change', browserSync.reload);
+  gulp.watch('./dist/js/*.js').on('change', browserSync.reload);
   gulp.watch('./*.html').on('change', browserSync.reload);
 });
 
