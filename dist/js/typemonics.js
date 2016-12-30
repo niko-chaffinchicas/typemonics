@@ -64,11 +64,13 @@
 	    minLineHeightMultiple: 0.5,
 	  };
 
+	  data['body-font'] = 'Roboto';
+	  data['header-font'] = '';
 	  data._fontManager = new FontManager();
 
 	  var fontSelects = document.querySelectorAll('.control-panel select[data-font-select]');
 	  for (var i = 0; i < fontSelects.length; i++) {
-	    data._fontManager.registerDropdown(fontSelects[i]);
+	    data._fontManager.registerDropdown(fontSelects[i], data[fontSelects[i].name]);
 	    data[fontSelects[i].name] = fontSelects[i].value;
 	    data[fontSelects[i].name + '-family'] = data._fontManager.getFontFamily(fontSelects[i].value);
 	    fontSelects[i].addEventListener('change', onFontSelected);
@@ -397,24 +399,23 @@
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var _availableFonts = __webpack_require__(7);
 
 	function FontManager() {
 	  var self = this;
 	  self._baseHref = 'https://fonts.googleapis.com/css?family=$font:400,400i,700"';
 	  self.loadedFonts = ["Roboto"];
-	  self.availableFonts = {
-	    "Roboto": "Roboto",
-	    "Kumar+One": "Kumar One",
-	    "Open+Sans": "Open Sans",
-	    "Montserrat": "Montserrat"
-	  }
+	  self.availableFonts = _availableFonts;
 	}
 
 	FontManager.prototype.getFontFamily = function(fontKey) {
 	  var self = this;
-	  var family = self.availableFonts[fontKey] || fontKey;
-	  console.log(family);
+	  var family = fontKey;
+	  if (self.availableFonts.indexOf(fontKey) > -1) {
+	    family = family.replace(/\+/g, ' ');
+	  }
 	  return family;
 	};
 
@@ -422,7 +423,7 @@
 	  var self = this;
 	  var opt = document.createElement('option');
 	  opt.value = fontKey;
-	  opt.innerHTML = self.availableFonts[fontKey];
+	  opt.innerHTML = self.getFontFamily(fontKey);
 	  return opt;
 	}
 
@@ -434,14 +435,18 @@
 	  return link;
 	}
 
-	FontManager.prototype.registerDropdown = function(select) {
+	FontManager.prototype.registerDropdown = function(select, _selected) {
 	  var self = this;
 	  select.addEventListener('change', function(e) {
 	    self._onSelectChange.call(self, e);
 	  });
-	  for (var font in self.availableFonts) {
+	  for (var i = 0; i < self.availableFonts.length; i++) {
+	    var font = self.availableFonts[i];
 	    if (!select.querySelector('option[value="' + font + '"]')) {
 	      var opt = self._getFontOption(font);
+	      if (_selected == font) {
+	        opt.setAttribute('selected', '');
+	      }
 	      select.appendChild(opt);
 	    }
 	  }
@@ -459,6 +464,82 @@
 	}
 
 	module.exports = FontManager;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = [
+	  "AbeeZee",
+	  "Abel",
+	  "Abhaya+Libre",
+	  "April+Fatface",
+	  "Aclonica",
+	  "Acme",
+	  "Actor",
+	  "Adamina",
+	  "Advent+Pro",
+	  "Aguafina+Script",
+	  "Akronim",
+	  "Aladin",
+	  "Aldrich",
+	  "Alef",
+	  "Alegrya",
+	  "Alegreya+SC",
+	  "Alegreya+Sans",
+	  "Alegreya+Sans+SC",
+	  "Alex+Brush",
+	  "Alfa+Slab+One",
+	  "Alice",
+	  "Alike",
+	  "Alike+Angular",
+	  "Allan",
+	  "Allerta",
+	  "Allerta+Stencil",
+	  "Allura",
+	  "Almendra",
+	  "Almendra+Display",
+	  "Almendra+SC",
+	  "Amarante",
+	  "Amaranth",
+	  "Amatic+SC",
+	  "Amatica+SC",
+	  "Amethysta",
+	  "Amiko",
+	  "Amiri",
+	  "Amita",
+	  "Anaheim",
+	  "Andada",
+	  "Andika",
+	  "Angkor",
+	  "Annie+Use+Your+Telescope",
+	  "Anonymous+Pro",
+	  "Antic",
+	  "Antic+Didone",
+	  "Antic+Slab",
+	  "Anton",
+	  "Arapey",
+	  "Arbutus",
+	  "Arbutus+Slab",
+	  "Architects+Daughter",
+	  "Archivo+Black",
+	  "Archivo+Narrow",
+	  "Aref+Ruqaa",
+	  "Arima+Madurai",
+	  "Arimo",
+	  "Arizonia",
+
+	  "Kumar+One",
+	  "Lato",
+	  "Montserrat",
+	  "Open+Sans",
+	  "Oswald",
+	  "Roboto",
+	  "Roboto+Condensed",
+	  "Slabo+27px",
+	  "Source+Sans+Pro",
+	]
 
 
 /***/ }

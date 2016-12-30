@@ -11,11 +11,13 @@
     minLineHeightMultiple: 0.5,
   };
 
+  data['body-font'] = 'Roboto';
+  data['header-font'] = '';
   data._fontManager = new FontManager();
 
   var fontSelects = document.querySelectorAll('.control-panel select[data-font-select]');
   for (var i = 0; i < fontSelects.length; i++) {
-    data._fontManager.registerDropdown(fontSelects[i]);
+    data._fontManager.registerDropdown(fontSelects[i], data[fontSelects[i].name]);
     data[fontSelects[i].name] = fontSelects[i].value;
     data[fontSelects[i].name + '-family'] = data._fontManager.getFontFamily(fontSelects[i].value);
     fontSelects[i].addEventListener('change', onFontSelected);

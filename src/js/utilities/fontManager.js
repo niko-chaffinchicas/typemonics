@@ -1,19 +1,18 @@
+var _availableFonts = require('./_availableFonts');
+
 function FontManager() {
   var self = this;
   self._baseHref = 'https://fonts.googleapis.com/css?family=$font:400,400i,700"';
   self.loadedFonts = ["Roboto"];
-  self.availableFonts = {
-    "Roboto": "Roboto",
-    "Kumar+One": "Kumar One",
-    "Open+Sans": "Open Sans",
-    "Montserrat": "Montserrat"
-  }
+  self.availableFonts = _availableFonts;
 }
 
 FontManager.prototype.getFontFamily = function(fontKey) {
   var self = this;
-  var family = self.availableFonts[fontKey] || fontKey;
-  console.log(family);
+  var family = fontKey;
+  if (self.availableFonts.indexOf(fontKey) > -1) {
+    family = family.replace(/\+/g, ' ');
+  }
   return family;
 };
 
@@ -21,7 +20,7 @@ FontManager.prototype._getFontOption = function(fontKey) {
   var self = this;
   var opt = document.createElement('option');
   opt.value = fontKey;
-  opt.innerHTML = self.availableFonts[fontKey];
+  opt.innerHTML = self.getFontFamily(fontKey);
   return opt;
 }
 
@@ -33,14 +32,18 @@ FontManager.prototype._getFontLink = function(fontKey) {
   return link;
 }
 
-FontManager.prototype.registerDropdown = function(select) {
+FontManager.prototype.registerDropdown = function(select, _selected) {
   var self = this;
   select.addEventListener('change', function(e) {
     self._onSelectChange.call(self, e);
   });
-  for (var font in self.availableFonts) {
+  for (var i = 0; i < self.availableFonts.length; i++) {
+    var font = self.availableFonts[i];
     if (!select.querySelector('option[value="' + font + '"]')) {
       var opt = self._getFontOption(font);
+      if (_selected == font) {
+        opt.setAttribute('selected', '');
+      }
       select.appendChild(opt);
     }
   }
