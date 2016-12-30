@@ -95,8 +95,6 @@
 	  }
 
 	  update.allStyling(data);
-
-	  window.ms = ms;
 	}(window, document));
 
 
