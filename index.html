@@ -10,12 +10,17 @@
       <h1>Typemonics</h1>
 
       <label for="font-base">Base:</label>
-      <input id="font-base" name="font-base" type="text" value="1rem">
+      <input id="font-base" name="font-base" type="text" data-val-min="1" value="1rem">
       <br>
 
       <label for="ratio">Ratio:</label>
       <input id="ratio" name="ratio" type="number" min="1" value="1.3">
       <br>
+
+      <label for="base-line-height">Base Line Height:</label>
+      <input id="base-line-height" name="base-line-height" data-val-min="1" type="text" value="1rem">
+
+      <hr>
 
       <label for="h1-step">H1 Step:</label>
       <input id="h1-step" name="h1-step" type="number" value="4">
