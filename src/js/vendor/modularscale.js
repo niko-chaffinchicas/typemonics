@@ -154,8 +154,10 @@ ms.ms = function(value, bases, ratios) {
 
   if (Math.abs(value) < r.length) {
     return r[Math.abs(value)][0];
-  } else {
+  } else if (r.length >= 1) {
     return r[r.length - 1][0];
+  } else {
+    return 1;
   }
 }
 

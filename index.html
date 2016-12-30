@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Typemonics</title>
     <link rel="stylesheet" href="dist/css/typemonics.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
   </head>
   <body>
     <div class="control-panel">
@@ -19,6 +20,18 @@
 
       <label for="base-line-height">Base Line Height:</label>
       <input id="base-line-height" name="base-line-height" data-val-min="1" type="text" value="1.6rem">
+      <br>
+
+      <label for="body-font">Body Typeface</label>
+      <select data-font-select id="body-font" name="body-font">
+        <option value="Roboto">Roboto</option>
+      </select>
+
+      <label for="header-font">Header Typeface</label>
+      <select data-font-select id="header-font" name="header-font">
+        <option value="" selected>Inherit</option>
+        <option value="Roboto">Roboto</option>
+      </select>
 
       <hr>
 

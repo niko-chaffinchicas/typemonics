@@ -55,18 +55,42 @@
 	  var update = __webpack_require__(2);
 	  var splitUnits = __webpack_require__(4);
 	  var floatElseString = __webpack_require__(5);
+	  var FontManager = __webpack_require__(6);
 	  console.log("Rocket science. 🚀");
 
 	  var data = {
 	    _allEls: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'],
-	    minLineHeightMultiple: 0.5
+	    _headers: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+	    minLineHeightMultiple: 0.5,
 	  };
+
+	  data._fontManager = new FontManager();
+
+	  var fontSelects = document.querySelectorAll('.control-panel select[data-font-select]');
+	  for (var i = 0; i < fontSelects.length; i++) {
+	    data._fontManager.registerDropdown(fontSelects[i]);
+	    data[fontSelects[i].name] = fontSelects[i].value;
+	    data[fontSelects[i].name + '-family'] = data._fontManager.getFontFamily(fontSelects[i].value);
+	    fontSelects[i].addEventListener('change', onFontSelected);
+	  }
 
 	  var inputs = document.querySelectorAll('.control-panel input');
 	  for (var i = 0; i < inputs.length; i++) {
 	    var val = floatElseString(inputs[i].value);
 	    data[inputs[i].name] = val;
 	    inputs[i].addEventListener('input', onInputChange);
+	  }
+
+	  function onFontSelected(e) {
+	    var name = e.target.name;
+	    var val = e.target.value;
+	    data[name] = val;
+	    data[name + '-family'] = data._fontManager.getFontFamily(val);
+	    if (name == "header-font") {
+	      update.headerStyling(data);
+	    } else {
+	      update.allStyling(data);
+	    }
 	  }
 
 	  function onInputChange(e) {
@@ -94,6 +118,8 @@
 	    }
 	  }
 
+	  window._data = data;
+
 	  update.allStyling(data);
 	}(window, document));
 
@@ -105,22 +131,35 @@
 	var ms = __webpack_require__(3);
 	var splitUnits = __webpack_require__(4);
 	var floatElseString = __webpack_require__(5);
-	_out = {};
+	update = {};
 
-	_out.allStyling = function(data) {
+	update.allStyling = function(data) {
 	  for (var i = 0; i < data._allEls.length; i++) {
-	    _out.styling(data._allEls[i], data);
+	    update.styling(data._allEls[i], data);
 	  }
 	}
 
-	_out.styling = function(el, data) {
+	update.headerStyling = function(data) {
+	  for (var i = 0; i < data._headers.length; i++) {
+	    update.styling(data._headers[i], data);
+	  }
+	}
+
+	update.styling = function(el, data) {
 	  var els = document.querySelectorAll('.sample-content ' + el);
-	  var size = _out._getFontSize(el, data);
-	  var lh = _out._getLineHeight(size, data);
+	  var size = update._getFontSize(el, data);
+	  var lh = update._getLineHeight(size, data);
 	  var _blh = splitUnits(data['base-line-height']);
+	  var font = data['body-font-family'];
+	  document.querySelector('.sample-content').style.fontFamily = "\'$font\'".replace('$font', font);
+	  if (data._headers.indexOf(el) > -1) {
+	    font = data['header-font-family'] || data['body-font-family'];
+	  }
+	  // console.log(font);
 	  var margin = (_blh.val * data.minLineHeightMultiple) + _blh.units;
 
 	  for (var i = 0; i < els.length; i++) {
+	    els[i].style.fontFamily = "'$font'".replace('$font', font);
 	    els[i].style.fontSize = size;
 	    els[i].style.lineHeight = lh;
 	    els[i].style.marginTop = margin;
@@ -128,7 +167,7 @@
 	  }
 	}
 
-	_out._getLineHeight = function(fontSize, data) {
+	update._getLineHeight = function(fontSize, data) {
 	  var _lh = splitUnits(data['base-line-height']);
 	  var out = _lh.val;
 	  var _fs = splitUnits(fontSize);
@@ -138,7 +177,7 @@
 	  return out + _lh.units;
 	}
 
-	_out._getFontSize = function(el, data) {
+	update._getFontSize = function(el, data) {
 	  var base = splitUnits(data['font-base']);
 	  var ratio = data['ratio'];
 	  var step = data[el + '-step'];
@@ -151,7 +190,7 @@
 	  return size;
 	}
 
-	module.exports = _out;
+	module.exports = update;
 
 
 /***/ },
@@ -314,8 +353,10 @@
 
 	  if (Math.abs(value) < r.length) {
 	    return r[Math.abs(value)][0];
-	  } else {
+	  } else if (r.length >= 1) {
 	    return r[r.length - 1][0];
+	  } else {
+	    return 1;
 	  }
 	}
 
@@ -352,6 +393,72 @@
 	}
 
 	module.exports = floatElseString;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	function FontManager() {
+	  var self = this;
+	  self._baseHref = 'https://fonts.googleapis.com/css?family=$font:400,400i,700"';
+	  self.loadedFonts = ["Roboto"];
+	  self.availableFonts = {
+	    "Roboto": "Roboto",
+	    "Kumar+One": "Kumar One",
+	    "Open+Sans": "Open Sans",
+	    "Montserrat": "Montserrat"
+	  }
+	}
+
+	FontManager.prototype.getFontFamily = function(fontKey) {
+	  var self = this;
+	  var family = self.availableFonts[fontKey] || fontKey;
+	  console.log(family);
+	  return family;
+	};
+
+	FontManager.prototype._getFontOption = function(fontKey) {
+	  var self = this;
+	  var opt = document.createElement('option');
+	  opt.value = fontKey;
+	  opt.innerHTML = self.availableFonts[fontKey];
+	  return opt;
+	}
+
+	FontManager.prototype._getFontLink = function(fontKey) {
+	  var self = this;
+	  var link = document.createElement('link');
+	  link.rel = "stylesheet";
+	  link.href = self._baseHref.replace('$font', fontKey);
+	  return link;
+	}
+
+	FontManager.prototype.registerDropdown = function(select) {
+	  var self = this;
+	  select.addEventListener('change', function(e) {
+	    self._onSelectChange.call(self, e);
+	  });
+	  for (var font in self.availableFonts) {
+	    if (!select.querySelector('option[value="' + font + '"]')) {
+	      var opt = self._getFontOption(font);
+	      select.appendChild(opt);
+	    }
+	  }
+	}
+
+	FontManager.prototype._onSelectChange = function(e) {
+	  var self = this;
+	  var font = e.target.value;
+	  if (self.loadedFonts.indexOf(font) == -1) {
+	    var link = self._getFontLink(font);
+	    document.head.appendChild(link);
+	    self.loadedFonts.push(font);
+	    // console.log("Loaded up", font);
+	  }
+	}
+
+	module.exports = FontManager;
 
 
 /***/ }

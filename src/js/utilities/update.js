@@ -1,22 +1,35 @@
 var ms = require('../vendor/modularscale');
 var splitUnits = require('./splitUnits');
 var floatElseString = require('./floatElseString');
-_out = {};
+update = {};
 
-_out.allStyling = function(data) {
+update.allStyling = function(data) {
   for (var i = 0; i < data._allEls.length; i++) {
-    _out.styling(data._allEls[i], data);
+    update.styling(data._allEls[i], data);
   }
 }
 
-_out.styling = function(el, data) {
+update.headerStyling = function(data) {
+  for (var i = 0; i < data._headers.length; i++) {
+    update.styling(data._headers[i], data);
+  }
+}
+
+update.styling = function(el, data) {
   var els = document.querySelectorAll('.sample-content ' + el);
-  var size = _out._getFontSize(el, data);
-  var lh = _out._getLineHeight(size, data);
+  var size = update._getFontSize(el, data);
+  var lh = update._getLineHeight(size, data);
   var _blh = splitUnits(data['base-line-height']);
+  var font = data['body-font-family'];
+  document.querySelector('.sample-content').style.fontFamily = "\'$font\'".replace('$font', font);
+  if (data._headers.indexOf(el) > -1) {
+    font = data['header-font-family'] || data['body-font-family'];
+  }
+  // console.log(font);
   var margin = (_blh.val * data.minLineHeightMultiple) + _blh.units;
 
   for (var i = 0; i < els.length; i++) {
+    els[i].style.fontFamily = "'$font'".replace('$font', font);
     els[i].style.fontSize = size;
     els[i].style.lineHeight = lh;
     els[i].style.marginTop = margin;
@@ -24,7 +37,7 @@ _out.styling = function(el, data) {
   }
 }
 
-_out._getLineHeight = function(fontSize, data) {
+update._getLineHeight = function(fontSize, data) {
   var _lh = splitUnits(data['base-line-height']);
   var out = _lh.val;
   var _fs = splitUnits(fontSize);
@@ -34,7 +47,7 @@ _out._getLineHeight = function(fontSize, data) {
   return out + _lh.units;
 }
 
-_out._getFontSize = function(el, data) {
+update._getFontSize = function(el, data) {
   var base = splitUnits(data['font-base']);
   var ratio = data['ratio'];
   var step = data[el + '-step'];
@@ -47,4 +60,4 @@ _out._getFontSize = function(el, data) {
   return size;
 }
 
-module.exports = _out;
+module.exports = update;
