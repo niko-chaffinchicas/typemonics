@@ -19,10 +19,13 @@
   function onInputChange(e) {
     var name = e.target.name;
     var val = floatElseString(e.target.value);
-    if (typeof val === "string" && e.target.hasAttribute('data-val-min')) {
+    if (e.target.hasAttribute('data-val-min')) {
       var _min = parseFloat(e.target.getAttribute('data-val-min'));
-      var _val = splitUnits(val);
-      if (_val.val < _min) {
+      var _val = val;
+      if (typeof _val === "string") {
+        _val = splitUnits(_val).val;
+      }
+      if (_val < _min) {
         return;
       }
     }
